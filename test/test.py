@@ -56,29 +56,36 @@ async def test_dividend_cero(dut):
 
   dut._log.info("Test dividend cero positive sign")
   for x in range(16):
-    await RisingEdge(dut.clk)
     dut.ui_in.value = x*16
     print(x, dut.ui_in.value)
-    await FallingEdge(dut.clk)
-    if ( x == 0):
-      assert dut.uo_out.value == 0b11111111
-    elif ( x == 8):
-      assert dut.uo_out.value == 0b11111111
-    else:
-      assert dut.uo_out.value == 0b00000000
+    if(x != 0): 
+        await FallingEdge(dut.clk)
+        if ( x-1 == 0):
+            assert dut.uo_out.value == 0b11111111
+        elif ( x-1 == 8):
+            assert dut.uo_out.value == 0b11111111
+        else:
+            assert dut.uo_out.value == 0b00000000
+    await RisingEdge(dut.clk)
+  await FallingEdge(dut.clk)
+  assert dut.uo_out.value == 0b00000000
+  await RisingEdge(dut.clk)
 
   dut._log.info("Test dividend cero negative sign")
   for x in range(16):
-    await RisingEdge(dut.clk)
     dut.ui_in.value = 0b00001000 + x*16
     print(x, dut.ui_in.value)
-    await FallingEdge(dut.clk)
-    if ( x == 0):
-      assert dut.uo_out.value == 0b11111111
-    elif ( x == 8):
-      assert dut.uo_out.value == 0b11111111
-    else:
-      assert dut.uo_out.value == 0b00000000
+    if(x != 0):
+        await FallingEdge(dut.clk)
+        if (x-1 == 0):
+            assert dut.uo_out.value == 0b11111111
+        elif (x-1 == 8):
+            assert dut.uo_out.value == 0b11111111
+        else:
+            assert dut.uo_out.value == 0b00000000
+    await RisingEdge(dut.clk)
+  await FallingEdge(dut.clk)
+  assert dut.uo_out.value == 0b00000000
 
 @cocotb.test()
 async def test_divider_one(dut):
